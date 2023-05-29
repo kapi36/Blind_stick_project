@@ -1,0 +1,107 @@
+#include <Servo.h> 
+int Servopin= 7;     
+int pos = 0 ; //servo motor pin 
+Servo myservo;
+int buzzPin =10; 
+int trigpin = 9 ; 
+int echopin = 8;
+int Ldr = A0;  
+int lightVal; 
+int time; 
+int distance; 
+int delayTime ; 
+void setup() {
+  
+  Serial.begin(9600); 
+pinMode(Ldr, INPUT); 
+pinMode(echopin, INPUT); 
+pinMode(trigpin,OUTPUT); 
+pinMode(buzzPin, OUTPUT); 
+pinMode(Servopin, OUTPUT); 
+myservo.attach(Servopin); 
+}
+void loop() {
+  
+for (pos = 0; pos <= 180; pos += 1) {
+    myservo.write(pos);              
+    delay(5);   
+    lightVal = analogRead(Ldr); 
+  Serial.println(lightVal); 
+  if(lightVal<400)
+  {
+    digitalWrite(buzzPin,HIGH); 
+    delay(10); 
+    digitalWrite(buzzPin, LOW); 
+  }
+else 
+{ 
+  digitalWrite(buzzPin,LOW); 
+}
+digitalWrite(trigpin,LOW); 
+delayMicroseconds(2); 
+digitalWrite(trigpin,HIGH); 
+delayMicroseconds(10); 
+digitalWrite(trigpin,LOW);
+
+time = pulseIn(echopin, HIGH); 
+distance = (time/2)/29.1; 
+
+Serial.print("Distance is: "); 
+Serial.print(distance); 
+Serial.println("CM") ; 
+
+if(distance <25)
+{
+  digitalWrite(buzzPin, HIGH ); 
+  delay(100);
+  digitalWrite(buzzPin,LOW); 
+}
+else
+{
+   digitalWrite(buzzPin,LOW); 
+}
+  }
+
+
+  for (pos = 180; pos >= 0; pos -= 1) { 
+    myservo.write(pos);              
+    delay(5);     
+    lightVal = analogRead(Ldr); 
+  Serial.println(lightVal); 
+  if(lightVal<30)
+  {
+    digitalWrite(buzzPin,HIGH); 
+    delay(10); 
+    digitalWrite(buzzPin, LOW); 
+  }
+else 
+{ 
+  digitalWrite(buzzPin,LOW); 
+}
+digitalWrite(trigpin,LOW); 
+delayMicroseconds(2); 
+digitalWrite(trigpin,HIGH); 
+delayMicroseconds(10); 
+digitalWrite(trigpin,LOW);
+
+time = pulseIn(echopin, HIGH); 
+distance = (time/2)/29.1; 
+
+Serial.print("Distance is: "); 
+Serial.print(distance); 
+Serial.println("CM") ; 
+
+if(distance <25)
+{
+  digitalWrite(buzzPin, HIGH ); 
+  delay(100); 
+  digitalWrite(buzzPin,LOW);
+  delay(100);  
+}
+else
+{
+   digitalWrite(buzzPin,LOW); 
+}                
+  }
+
+}
